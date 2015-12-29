@@ -69,9 +69,9 @@ public class Test {
 	     
 	     //发布流程
 	     RepositoryService repositoryService = processEngine.getRepositoryService();
-	     repositoryService.createDeployment()
-	       .addClasspathResource("VacationRequest.bpmn20.xml")
-	       .deploy();
+//	     repositoryService.createDeployment()
+//	       .addClasspathResource("VacationRequest.bpmn20.xml")
+//	       .deploy();
 	           
 	     System.out.println("Number of process definitions: " + repositoryService.createProcessDefinitionQuery().count());   
 	     
@@ -104,7 +104,7 @@ public class Test {
 	     
 	    // if (true) throw new Exception("sss");
 	     
-	     System.out.println(Message.getMessage("login", (String)((Session)map.get("SESSION")).getAttribute("locale")));
+	     //System.out.println(Message.getMessage("login", (String)((Session)map.get("SESSION")).getAttribute("locale")));
 		return null;
 	}
 	

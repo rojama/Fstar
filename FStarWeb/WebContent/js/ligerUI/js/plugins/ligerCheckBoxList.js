@@ -1,9 +1,9 @@
 ﻿/**
-* jQuery ligerUI 1.2.4
+* jQuery ligerUI 1.3.2
 * 
 * http://ligerui.com
 *  
-* Author daomi 2014 [ gd_star@163.com ] 
+* Author daomi 2015 [ gd_star@163.com ] 
 * 
 */
 (function ($)
@@ -24,6 +24,7 @@
         data: null,             //数据  
         parms: null,            //ajax提交表单 
         url: null,              //数据源URL(需返回JSON)
+        ajaxType : 'post',
         onSuccess: null,
         onError: null,  
         css: null,               //附加css  
@@ -57,8 +58,16 @@
             var g = this, p = this.options; 
             g.data = p.data;    
             g.valueField = null; //隐藏域(保存值) 
-               
-            if (p.valueFieldID)
+
+            if ($(this.element).is(":hidden") || $(this.element).is(":text"))
+            {
+                g.valueField = $(this.element);
+                if ($(this.element).is(":text"))
+                {
+                    g.valueField.hide();
+                }
+            }
+            else if (p.valueFieldID)
             {
                 g.valueField = $("#" + p.valueFieldID + ":input,[name=" + p.valueFieldID + "]:input");
                 if (g.valueField.length == 0) g.valueField = $('<input type="hidden"/>');
@@ -75,7 +84,14 @@
                 g.valueField.addClass(p.valueFieldCssClass);
             }
             g.valueField.attr("data-ligerid", g.id);
-            g.checkboxList = $(this.element);
+
+            if ($(this.element).is(":hidden") || $(this.element).is(":text"))
+            {
+                g.checkboxList = $('<div></div>').insertBefore(this.element);
+            } else
+            {
+                g.checkboxList = $(this.element);
+            }
             g.checkboxList.html('<div class="l-checkboxlist-inner"><table cellpadding="0" cellspacing="0" border="0" class="l-checkboxlist-table"></table></div>').addClass("l-checkboxlist").append(g.valueField);
             g.checkboxList.table = $("table:first", g.checkboxList); 
               
@@ -198,7 +214,7 @@
             var g = this, p = this.options;
             var parms = $.isFunction(p.parms) ? p.parms() : p.parms;
             $.ajax({
-                type: 'post',
+                type: p.ajaxType || 'post',
                 url: url,
                 data: parms,
                 cache: false,
@@ -277,7 +293,19 @@
         {
             //获取值
             return this._getValue();
-        },  
+        },
+
+        getText : function()
+        {
+            var g = this, p = this.options, name = p.name || g.id;
+            var values = [];
+            $('input:checkbox[name="' + name + '"]:checked').each(function ()
+            {
+                values.push($(this).next("label").text());
+            });
+            if (!values.length) return null;
+            return values.join(p.split);
+        },
         updateStyle: function ()
         {
             this._dataInit();

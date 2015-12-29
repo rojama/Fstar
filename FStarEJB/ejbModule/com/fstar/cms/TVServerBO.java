@@ -27,7 +27,7 @@ public class TVServerBO {
 		Map<String, Object> returnmap = new HashMap<String, Object>();
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("super_id", "");
-		List<Map<String, Object>> re = DB.seleteByColumn(MediaBO.TABLE_MEDIA_TYPE, data, "type_id,type_name", "order by order_no");
+		List<Map<String, Object>> re = DB.seleteByColumn(MediaBO.TABLE_MEDIA_TYPE, data, "type_id,type_name,component", "order by order_no");
 		TVServerImageBO.changeImageToURL(re, MediaBO.TABLE_MEDIA_TYPE);
 		returnmap.put("type", re);
 		return returnmap;

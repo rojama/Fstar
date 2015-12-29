@@ -263,6 +263,6 @@ function keyDown(e){
 		<a href="login.jsp?user_locale=en-US">English</a> - 
 		<a href="login.jsp?user_locale=zh_CN">中文简体</a> - 
 		<a href="login.jsp?user_locale=zh_TW">中文繁体</a> 
-		&nbsp;&nbsp;&nbsp;方晟达电脑系统有限公司 版权信息 2015</div>
+		&nbsp;&nbsp;&nbsp;天软电脑系统有限公司 版权信息 2015</div>
 </body>
 </html>

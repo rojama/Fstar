@@ -1,9 +1,9 @@
 ﻿/**
-* jQuery ligerUI 1.2.4
+* jQuery ligerUI 1.3.2
 * 
 * http://ligerui.com
 *  
-* Author daomi 2014 [ gd_star@163.com ] 
+* Author daomi 2015 [ gd_star@163.com ] 
 * 
 */
 (function ($)
@@ -22,6 +22,8 @@
         name: null,            //表单名 
         data: null,             //数据  
         parms: null,            //ajax提交表单 
+        ajaxContentType: null,
+        ajaxType: 'post',
         url: null,              //数据源URL(需返回JSON)
         onSuccess: null,
         onError: null,
@@ -57,8 +59,16 @@
             var g = this, p = this.options;
             g.data = p.data;
             g.valueField = null; //隐藏域(保存值) 
-
-            if (p.valueFieldID)
+             
+            if ($(this.element).is(":hidden") || $(this.element).is(":text"))
+            {
+                g.valueField = $(this.element);
+                if ($(this.element).is(":text"))
+                {
+                    g.valueField.hide();
+                }
+            }
+            else if (p.valueFieldID)
             {
                 g.valueField = $("#" + p.valueFieldID + ":input,[name=" + p.valueFieldID + "]:input");
                 if (g.valueField.length == 0) g.valueField = $('<input type="hidden"/>');
@@ -75,7 +85,15 @@
                 g.valueField.addClass(p.valueFieldCssClass);
             }
             g.valueField.attr("data-ligerid", g.id);
-            g.radioList = $(this.element);
+
+
+            if ($(this.element).is(":hidden") || $(this.element).is(":text"))
+            {
+                g.radioList = $('<div></div>').insertBefore(this.element);
+            } else
+            {
+                g.radioList = $(this.element);
+            }
             g.radioList.html('<div class="l-radiolist-inner"><table cellpadding="0" cellspacing="0" border="0" class="l-radiolist-table"></table></div>').addClass("l-radiolist").append(g.valueField);
             g.radioList.table = $("table:first", g.radioList);
 
@@ -188,6 +206,7 @@
         _setValue: function (value)
         {
             var g = this, p = this.options;
+            g.valueField.val(value);
             p.value = value;
             this._dataInit();
         },
@@ -199,12 +218,13 @@
         {
             if (!url) return;
             var g = this, p = this.options;
-            $.ajax({
-                type: 'post',
+            var ajaxOp = {
+                type: p.ajaxType || 'post',
                 url: url,
                 data: p.parms,
                 cache: false,
                 dataType: 'json',
+
                 success: function (data)
                 {
                     g.setData(data);
@@ -214,7 +234,13 @@
                 {
                     g.trigger('error', [XMLHttpRequest, textStatus]);
                 }
-            });
+            };
+
+            if (p.ajaxContentType)
+            {
+                ajaxOp.contentType = p.ajaxContentType;
+            }
+            $.ajax(ajaxOp);
         },
         setUrl: function (url)
         {

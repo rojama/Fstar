@@ -221,7 +221,7 @@ width: 400px;
         
     </div>
     <div  style="height:20px; line-height:20px; text-align:center;">
-            Copyright © 2000-2014 fstar
+            Copyright © 2000-2015 SkySoft
     </div>
     <div style="display:none"></div>
     <form id="changepasswordPanel" style="display:none;">
